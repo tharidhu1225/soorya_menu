@@ -133,7 +133,7 @@ export default function Header({
 
               <span className="text-white font-semibold">
                 {categoryFilter && categoryFilter !== "all"
-                  ? selectedCat || "Loading..."
+                  ? selectedCat || "All Categories"
                   : "All Categories"}
               </span>
             </div>
