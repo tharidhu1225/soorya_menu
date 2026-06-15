@@ -3,6 +3,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 import Header from "./compornents/hedder";
 import HomePage from "./pages/homePage";
+import BlockPage from "./pages/blockPage";
 
 function App() {
   return (
@@ -10,7 +11,7 @@ function App() {
       <Toaster position="top-right" />
 
       <Routes>
-        <Route path="/" element={<HomePage />} />
+        <Route path="/" element={<BlockPage />} />
       </Routes>
     </BrowserRouter>
   );
