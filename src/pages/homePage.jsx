@@ -15,29 +15,43 @@ export default function HomePage() {
 
   const [selectedSizes, setSelectedSizes] = useState({});
 
-  useEffect(() => {
-    const loadData = async () => {
-      try {
-        setLoading(true);
+  
 
-        const [menuRes, categoryRes] = await Promise.all([
-          axios.get(`${API}/api/menu`),
-          axios.get(`${API}/api/category`),
-        ]);
+useEffect(() => {
+  const loadData = async () => {
+    try {
+      const [menuRes, categoryRes] = await Promise.all([
+        axios.get(`${API}/api/menu`),
+        axios.get(`${API}/api/category`),
+      ]);
 
-        setMenus(menuRes.data);
-        setCategories(categoryRes.data);
-      } catch (err) {
-        console.log(err);
-      } finally {
-        setTimeout(() => {
-          setLoading(false);
-        }, 800);
-      }
-    };
+      const availableMenus = menuRes.data.filter(
+        (item) => item.isAvailable === true
+      );
 
+      setMenus(availableMenus);
+      setCategories(categoryRes.data);
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // First Load
+  loadData();
+
+  // Auto refresh every 5 seconds
+  const interval = setInterval(() => {
     loadData();
-  }, [API]);
+  }, 5000);
+
+  return () => clearInterval(interval);
+}, [API]);
+
+
+
+
 
   const filteredMenus = menus.filter((item) => {
     const mealMatch =
@@ -50,7 +64,12 @@ export default function HomePage() {
     return mealMatch && categoryMatch;
   });
 
-  const specialMenus = menus.filter((item) => item.isSpecial);
+  
+const specialMenus = menus.filter(
+  (item) => item.isSpecial && item.isAvailable
+);
+
+
 
   if (loading) {
     return <LoadingScreen />;
